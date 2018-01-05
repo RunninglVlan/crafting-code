@@ -3,7 +3,9 @@ package kata
 import spock.lang.Specification
 
 /**
- * Requirements: <a href="http://osherove.com/tdd-kata-1">String Calculator</a>
+ * Requirements:
+ * <a href="http://osherove.com/tdd-kata-1">String Calculator</a>,
+ * <a href="http://osherove.com/tdd-kata-2">String Calculator with Dependencies</a>
  */
 class StringCalculatorShould extends Specification {
 

@@ -5,7 +5,7 @@ object StringCalculator {
 	@JvmStatic
 	fun add(numbers: String): Int {
 		val intNumbers = StringNumbers(numbers).value()
-				.map(this::toInt)
+				.map { toInt(it) }
 				.filter { it <= 1000 }
 		ensureNoNegatives(intNumbers)
 		return intNumbers.sum()
@@ -23,11 +23,11 @@ object StringCalculator {
 	private class StringNumbers(private val numbers: String) {
 
 		companion object {
-			private val DELIMITER_PARAMETER: String = "//"
-			private val NEW_LINE_DELIMITER: String = "\n"
-			private val DEFAULT_DELIMITER: String = ","
-			private val DELIMITER_WRAPPERS: List<String> = listOf("[", "]")
-			private val DELIMITER_OF_WRAPPED_DELIMITERS: String = "]["
+			private val DELIMITER_PARAMETER = "//"
+			private val NEW_LINE_DELIMITER = "\n"
+			private val DEFAULT_DELIMITER = ","
+			private val DELIMITER_WRAPPERS = listOf("[", "]")
+			private val DELIMITER_OF_WRAPPED_DELIMITERS = "]["
 		}
 
 		private var delimiters: Array<String> =
