@@ -1,14 +1,15 @@
-package kata
+package kata.calculator
 
-object StringCalculator {
+class StringCalculator(private val logger: Logger) {
 
-	@JvmStatic
 	fun add(numbers: String): Int {
 		val intNumbers = StringNumbers(numbers).value()
 				.map { toInt(it) }
 				.filter { it <= 1000 }
 		ensureNoNegatives(intNumbers)
-		return intNumbers.sum()
+		val sum = intNumbers.sum()
+		logger.write(sum)
+		return sum
 	}
 
 	private fun toInt(number: String) = number.toIntOrNull() ?: 0

@@ -1,4 +1,4 @@
-package kata
+package kata.calculator
 
 import spock.lang.Specification
 
@@ -9,9 +9,13 @@ import spock.lang.Specification
  */
 class StringCalculatorShould extends Specification {
 
+	def logger = Mock(Logger)
+
+	def calculator = new StringCalculator(logger)
+
 	def 'add 0, 1 or 2 numbers'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers | sum
@@ -22,7 +26,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'add more than 2 numbers'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers     | sum
@@ -33,7 +37,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'support new line delimiter in addition to default comma delimiter'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers  | sum
@@ -43,7 +47,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'support other delimiters of one character'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers     | sum
@@ -57,7 +61,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'support other delimiters of multiple characters'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers              | sum
@@ -71,7 +75,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'use default comma delimiter if incorrect delimiter format is used'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers     | sum
@@ -81,7 +85,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'support multiple delimiters'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers                | sum
@@ -91,7 +95,7 @@ class StringCalculatorShould extends Specification {
 
 	def 'not support negative numbers'() {
 		when:
-		StringCalculator.add(numbers)
+		calculator.add(numbers)
 
 		then:
 		def exception = thrown(IllegalStateException)
@@ -106,12 +110,27 @@ class StringCalculatorShould extends Specification {
 
 	def 'ignore numbers larger than 1000'() {
 		expect:
-		StringCalculator.add(numbers) == sum
+		calculator.add(numbers) == sum
 
 		where:
 		numbers      | sum
 		'5,4,1001'   | 9
 		'6,3,1,2000' | 10
 		'1,5,1000'   | 1006
+	}
+
+	def 'log result'() {
+		when:
+		calculator.add(numbers)
+
+		then:
+		1 * logger.write(sum)
+
+		where:
+		numbers   | sum
+		''        | 0
+		'2'       | 2
+		'4,5'     | 9
+		'5,6,7,8' | 26
 	}
 }
