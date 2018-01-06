@@ -10,8 +10,9 @@ import spock.lang.Specification
 class StringCalculatorShould extends Specification {
 
 	def logger = Mock(Logger)
+	def webService = Mock(WebService)
 
-	def calculator = new StringCalculator(logger)
+	def calculator = new StringCalculator(logger, webService)
 
 	def 'add 0, 1 or 2 numbers'() {
 		expect:
@@ -132,5 +133,19 @@ class StringCalculatorShould extends Specification {
 		'2'       | 2
 		'4,5'     | 9
 		'5,6,7,8' | 26
+	}
+
+	def 'notify web service when logging fails'() {
+		given:
+		logger.write(_) >> { throw new RuntimeException(message) }
+
+		when:
+		calculator.add('')
+
+		then:
+		1 * webService.error(message)
+
+		where:
+		message << ['Unexpected error', 'Unexpected problem']
 	}
 }

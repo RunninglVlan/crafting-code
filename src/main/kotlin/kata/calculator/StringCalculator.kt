@@ -1,6 +1,8 @@
 package kata.calculator
 
-class StringCalculator(private val logger: Logger) {
+class StringCalculator(
+		private val logger: Logger,
+		private val webService: WebService) {
 
 	fun add(numbers: String): Int {
 		val intNumbers = StringNumbers(numbers).value()
@@ -8,7 +10,7 @@ class StringCalculator(private val logger: Logger) {
 				.filter { it <= 1000 }
 		ensureNoNegatives(intNumbers)
 		val sum = intNumbers.sum()
-		logger.write(sum)
+		log(sum)
 		return sum
 	}
 
@@ -18,6 +20,14 @@ class StringCalculator(private val logger: Logger) {
 		val negatives = numbers.filter { it < 0 }
 		check(negatives.isEmpty()) {
 			"Negatives not allowed: ${negatives.joinToString()}"
+		}
+	}
+
+	private fun log(sum: Int) {
+		try {
+			logger.write(sum)
+		} catch (e: RuntimeException) {
+			webService.error(e.message)
 		}
 	}
 
