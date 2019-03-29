@@ -1,27 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-	var kotlinVersion: String by extra
-	kotlinVersion = "1.2.10"
-
-	repositories.mavenCentral()
-
-	dependencies {
-		classpath(kotlinModule("gradle-plugin", kotlinVersion))
-	}
+plugins {
+	kotlin("jvm") version "1.2.61"
+	groovy
 }
-
-apply {
-	plugin("kotlin")
-	plugin("groovy")
-}
-
-val kotlinVersion: String by extra
 
 repositories.mavenCentral()
 
 dependencies {
-	compile(kotlinModule("stdlib-jdk8", kotlinVersion))
+	compile(kotlin("stdlib-jdk8"))
+
 	testCompile("org.codehaus.groovy:groovy-all:2.4.13")
 	testCompile("org.spockframework:spock-core:1.1-groovy-2.4")
 	testCompile("cglib:cglib-nodep:3.2.5")
