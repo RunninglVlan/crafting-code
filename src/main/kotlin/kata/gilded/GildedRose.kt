@@ -2,12 +2,13 @@ package kata.gilded
 
 const val LEGENDARY_ITEM = "Sulfuras, Hand of Ragnaros"
 const val AGED_BRIE = "Aged Brie"
+const val BACKSTAGE_PASSES = "Backstage passes"
 
 class GildedRose(var items: Array<Item>) {
 
 	fun updateQuality() {
 		items.forEach {
-			if (it.name != AGED_BRIE && it.name != "Backstage passes to a TAFKAL80ETC concert") {
+			if (it.name != AGED_BRIE && !it.name.contains(BACKSTAGE_PASSES)) {
 				if (it.quality > 0) {
 					if (it.name != LEGENDARY_ITEM) {
 						it.quality--
@@ -17,7 +18,7 @@ class GildedRose(var items: Array<Item>) {
 				if (it.quality < 50) {
 					it.quality++
 
-					if (it.name == "Backstage passes to a TAFKAL80ETC concert") {
+					if (it.name.contains(BACKSTAGE_PASSES)) {
 						if (it.sellIn < 11) {
 							if (it.quality < 50) {
 								it.quality++
@@ -39,7 +40,7 @@ class GildedRose(var items: Array<Item>) {
 
 			if (it.sellIn < 0) {
 				if (it.name != AGED_BRIE) {
-					if (it.name != "Backstage passes to a TAFKAL80ETC concert") {
+					if (!it.name.contains(BACKSTAGE_PASSES)) {
 						if (it.quality > 0) {
 							if (it.name != LEGENDARY_ITEM) {
 								it.quality--
