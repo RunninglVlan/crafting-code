@@ -1,53 +1,56 @@
 package kata.gilded
 
+const val LEGENDARY_ITEM = "Sulfuras, Hand of Ragnaros"
+const val AGED_BRIE = "Aged Brie"
+
 class GildedRose(var items: Array<Item>) {
 
 	fun updateQuality() {
-		for (i in items.indices) {
-			if (!items[i].name.equals("Aged Brie") && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-				if (items[i].quality > 0) {
-					if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-						items[i].quality = items[i].quality - 1
+		items.forEach {
+			if (it.name != AGED_BRIE && it.name != "Backstage passes to a TAFKAL80ETC concert") {
+				if (it.quality > 0) {
+					if (it.name != LEGENDARY_ITEM) {
+						it.quality--
 					}
 				}
 			} else {
-				if (items[i].quality < 50) {
-					items[i].quality = items[i].quality + 1
+				if (it.quality < 50) {
+					it.quality++
 
-					if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-						if (items[i].sellIn < 11) {
-							if (items[i].quality < 50) {
-								items[i].quality = items[i].quality + 1
+					if (it.name == "Backstage passes to a TAFKAL80ETC concert") {
+						if (it.sellIn < 11) {
+							if (it.quality < 50) {
+								it.quality++
 							}
 						}
 
-						if (items[i].sellIn < 6) {
-							if (items[i].quality < 50) {
-								items[i].quality = items[i].quality + 1
+						if (it.sellIn < 6) {
+							if (it.quality < 50) {
+								it.quality++
 							}
 						}
 					}
 				}
 			}
 
-			if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-				items[i].sellIn = items[i].sellIn - 1
+			if (it.name != LEGENDARY_ITEM) {
+				it.sellIn--
 			}
 
-			if (items[i].sellIn < 0) {
-				if (!items[i].name.equals("Aged Brie")) {
-					if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-						if (items[i].quality > 0) {
-							if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-								items[i].quality = items[i].quality - 1
+			if (it.sellIn < 0) {
+				if (it.name != AGED_BRIE) {
+					if (it.name != "Backstage passes to a TAFKAL80ETC concert") {
+						if (it.quality > 0) {
+							if (it.name != LEGENDARY_ITEM) {
+								it.quality--
 							}
 						}
 					} else {
-						items[i].quality = items[i].quality - items[i].quality
+						it.quality = 0
 					}
 				} else {
-					if (items[i].quality < 50) {
-						items[i].quality = items[i].quality + 1
+					if (it.quality < 50) {
+						it.quality++
 					}
 				}
 			}
