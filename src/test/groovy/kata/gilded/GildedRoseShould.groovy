@@ -57,14 +57,21 @@ class GildedRoseShould extends Specification {
 
 	def 'quality of Aged Brie increases the older it gets'() {
 		given:
-		def inn = innWith(new Item('Aged Brie', 2, 2))
+		def inn = innWith(new Item('Aged Brie', 1, 2))
 
 		when:
 		inn.updateQuality()
 
 		then:
-		inn.items.first().sellIn == 1
+		inn.items.first().sellIn == 0
 		inn.items.first().quality == 3
+
+		when:
+		inn.updateQuality()
+
+		then:
+		inn.items.first().sellIn == -1
+		inn.items.first().quality == 5
 	}
 
 	def 'max quality is 50'() {
@@ -95,16 +102,30 @@ class GildedRoseShould extends Specification {
 		given:
 		def inn = innWith(
 				new Item('Backstage passes to a TAFKAL80ETC concert', 20, 10),
+
+				new Item('Backstage passes to a TAFKAL70ETC concert', 11, 10),
 				new Item('Backstage passes to a TAFKAL70ETC concert', 10, 10),
+				new Item('Backstage passes to a TAFKAL70ETC concert', 9, 10),
+
+				new Item('Backstage passes to a TAFKAL60ETC concert', 6, 10),
 				new Item('Backstage passes to a TAFKAL60ETC concert', 5, 10),
-				new Item('Backstage passes to a TAFKAL50ETC concert', 0, 10)
+				new Item('Backstage passes to a TAFKAL60ETC concert', 4, 10),
+
+				new Item('Backstage passes to a TAFKAL50ETC concert', 1, 10),
+				new Item('Backstage passes to a TAFKAL50ETC concert', 0, 10),
+				new Item('Backstage passes to a TAFKAL50ETC concert', -1, 10)
 		)
 
 		when:
 		inn.updateQuality()
 
 		then:
-		inn.items.collect { it.quality } == [11, 12, 13, 0]
+		inn.items.collect { it.quality } == [
+				11,
+				11, 12, 12,
+				12, 13, 13,
+				13, 0, 0
+		]
 	}
 
 	def 'Conjured items degrade in quality twice as fast as normal items'() {
