@@ -12,35 +12,29 @@ class GildedRose(var items: Array<Item>) {
 				return@forEach
 			}
 
-			if (it.name != AGED_BRIE && !it.name.contains(BACKSTAGE_PASSES)) {
-				it.quality--
-			} else {
-				it.quality++
-
-				if (it.name.contains(BACKSTAGE_PASSES)) {
-					if (it.sellIn < 11) {
-						it.quality++
-					}
-
-					if (it.sellIn < 6) {
-						it.quality++
-					}
-				}
-			}
-
 			it.sellIn--
 
-			if (it.sellIn < 0) {
-				if (it.name != AGED_BRIE) {
-					if (!it.name.contains(BACKSTAGE_PASSES)) {
-						it.quality--
-					} else {
-						it.quality = 0
-					}
+			if (it.name == AGED_BRIE) {
+				if (it.sellIn < 0) {
+					it.quality += 2
 				} else {
 					it.quality++
 				}
+			} else if (it.name.contains(BACKSTAGE_PASSES)) {
+				when {
+					it.sellIn < 0 -> it.quality = 0
+					it.sellIn < 5 -> it.quality += 3
+					it.sellIn < 10 -> it.quality += 2
+					else -> it.quality++
+				}
+			} else {
+				if (it.sellIn < 0) {
+					it.quality -= 2
+				} else {
+					it.quality--
+				}
 			}
+
 			it.quality = Math.max(it.quality, 0)
 			it.quality = Math.min(it.quality, 50)
 		}
