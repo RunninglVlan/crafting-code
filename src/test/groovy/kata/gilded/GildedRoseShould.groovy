@@ -96,14 +96,29 @@ class GildedRoseShould extends Specification {
 		def inn = innWith(
 				new Item('Backstage passes to a TAFKAL80ETC concert', 20, 10),
 				new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10),
-				new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10)
+				new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10),
+				new Item('Backstage passes to a TAFKAL70ETC concert', 5, 10)
 		)
 
 		when:
 		inn.updateQuality()
 
 		then:
-		inn.items.collect { it.quality } == [11, 12, 13]
+		inn.items.collect { it.quality } == [11, 12, 13, 13]
+	}
+
+	def 'Conjured items degrade in quality twice as fast as normal items'() {
+		given:
+		def inn = innWith(
+				new Item('Conjured Mana Cake', 5, 10),
+				new Item('Conjured Mana Potion', -5, 10),
+		)
+
+		when:
+		inn.updateQuality()
+
+		then:
+		inn.items.collect { it.quality } == [8, 6]
 	}
 
 	static innWith(Item... items) {
