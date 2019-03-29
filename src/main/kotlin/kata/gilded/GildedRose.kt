@@ -19,7 +19,7 @@ class GildedRose(var items: Array<Item>) {
 				equals(LEGENDARY_ITEM) -> doNotChangeLegendaryItem()
 				equals(AGED_BRIE) -> increaseQualityOf(item)
 				startsWith(BACKSTAGE_PASSES) -> updateQualityOfBackstage(item)
-				startsWith(CONJURED) -> updateQualityOfConjured(item)
+				startsWith(CONJURED) -> degradeQualityOfConjured(item)
 				else -> degradeQualityOfRegular(item)
 			}
 		}
@@ -44,7 +44,7 @@ class GildedRose(var items: Array<Item>) {
 		pass.quality = Math.min(pass.quality, 50)
 	}
 
-	private fun updateQualityOfConjured(item: Item) {
+	private fun degradeQualityOfConjured(item: Item) {
 		changeItemQuality(item, -2)
 	}
 
