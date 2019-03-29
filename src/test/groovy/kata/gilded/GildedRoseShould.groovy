@@ -97,6 +97,7 @@ class GildedRoseShould extends Specification {
 				new Item('Backstage passes to a TAFKAL80ETC concert', 20, 10),
 				new Item('Backstage passes to a TAFKAL80ETC concert', 10, 10),
 				new Item('Backstage passes to a TAFKAL80ETC concert', 5, 10),
+				new Item('Backstage passes to a TAFKAL80ETC concert', 0, 10),
 				new Item('Backstage passes to a TAFKAL70ETC concert', 5, 10)
 		)
 
@@ -104,7 +105,8 @@ class GildedRoseShould extends Specification {
 		inn.updateQuality()
 
 		then:
-		inn.items.collect { it.quality } == [11, 12, 13, 13]
+		inn.items.findAll { !it.name.contains('TAFKAL70ETC') }.collect { it.quality } == [11, 12, 13, 0]
+		inn.items.last().quality == 13
 	}
 
 	def 'Conjured items degrade in quality twice as fast as normal items'() {
