@@ -3,6 +3,7 @@ package kata.gilded
 private const val LEGENDARY_ITEM = "Sulfuras, Hand of Ragnaros"
 private const val AGED_BRIE = "Aged Brie"
 private const val BACKSTAGE_PASSES = "Backstage passes"
+private const val CONJURED = "Conjured"
 
 class GildedRose(var items: Array<Item>) {
 
@@ -18,6 +19,7 @@ class GildedRose(var items: Array<Item>) {
 				equals(LEGENDARY_ITEM) -> doNotChangeLegendaryItem()
 				equals(AGED_BRIE) -> increaseQualityOf(item)
 				startsWith(BACKSTAGE_PASSES) -> updateQualityOfBackstage(item)
+				startsWith(CONJURED) -> updateQualityOfConjured(item)
 				else -> degradeQualityOfRegular(item)
 			}
 		}
@@ -28,7 +30,7 @@ class GildedRose(var items: Array<Item>) {
 	}
 
 	private fun increaseQualityOf(item: Item) {
-		changeItemQualityWithSign(item, 1)
+		changeItemQuality(item, 1)
 	}
 
 	private fun updateQualityOfBackstage(pass: Item) {
@@ -42,16 +44,20 @@ class GildedRose(var items: Array<Item>) {
 		pass.quality = Math.min(pass.quality, 50)
 	}
 
-	private fun degradeQualityOfRegular(item: Item) {
-		changeItemQualityWithSign(item, -1)
+	private fun updateQualityOfConjured(item: Item) {
+		changeItemQuality(item, -2)
 	}
 
-	private fun changeItemQualityWithSign(item: Item, sign: Int) {
+	private fun degradeQualityOfRegular(item: Item) {
+		changeItemQuality(item, -1)
+	}
+
+	private fun changeItemQuality(item: Item, normalAmount: Int) {
 		item.sellIn--
 		if (item.sellIn < 0) {
-			item.quality += sign * 2
+			item.quality += normalAmount * 2
 		} else {
-			item.quality += sign
+			item.quality += normalAmount
 		}
 		item.quality = Math.min(item.quality, 50)
 		item.quality = Math.max(item.quality, 0)
