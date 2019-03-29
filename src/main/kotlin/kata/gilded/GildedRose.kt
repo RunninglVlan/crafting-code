@@ -7,36 +7,57 @@ const val BACKSTAGE_PASSES = "Backstage passes"
 class GildedRose(var items: Array<Item>) {
 
 	fun updateQuality() {
-		items.forEach {
-			if (it.name == LEGENDARY_ITEM) {
-				return@forEach
-			}
-
-			it.sellIn--
-
-			if (it.name == AGED_BRIE) {
-				if (it.sellIn < 0) {
-					it.quality += 2
-				} else {
-					it.quality++
-				}
-			} else if (it.name.contains(BACKSTAGE_PASSES)) {
-				when {
-					it.sellIn < 0 -> it.quality = 0
-					it.sellIn < 5 -> it.quality += 3
-					it.sellIn < 10 -> it.quality += 2
-					else -> it.quality++
-				}
-			} else {
-				if (it.sellIn < 0) {
-					it.quality -= 2
-				} else {
-					it.quality--
-				}
-			}
-
-			it.quality = Math.max(it.quality, 0)
-			it.quality = Math.min(it.quality, 50)
+		items.forEach { item ->
+			updateQualityOf(item)
 		}
+	}
+
+	private fun updateQualityOf(item: Item) {
+		with(item.name) {
+			when {
+				equals(LEGENDARY_ITEM) -> doNotChangeLegendaryItem()
+				equals(AGED_BRIE) -> increaseQualityOf(item)
+				startsWith(BACKSTAGE_PASSES) -> updateQualityOfBackstage(item)
+				else -> degradeQualityOfRegular(item)
+			}
+		}
+	}
+
+	private fun doNotChangeLegendaryItem() {
+		return
+	}
+
+	private fun increaseQualityOf(item: Item) {
+		changeItemQualityWithSign(item, 1)
+	}
+
+	private fun updateQualityOfBackstage(pass: Item) {
+		decreaseSellInOf(pass)
+		when {
+			pass.sellIn < 0 -> pass.quality = 0
+			pass.sellIn < 5 -> pass.quality += 3
+			pass.sellIn < 10 -> pass.quality += 2
+			else -> pass.quality++
+		}
+		pass.quality = Math.min(pass.quality, 50)
+	}
+
+	private fun degradeQualityOfRegular(item: Item) {
+		changeItemQualityWithSign(item, -1)
+	}
+
+	private fun changeItemQualityWithSign(item: Item, sign: Int) {
+		decreaseSellInOf(item)
+		if (item.sellIn < 0) {
+			item.quality += sign * 2
+		} else {
+			item.quality += sign
+		}
+		item.quality = Math.min(item.quality, 50)
+		item.quality = Math.max(item.quality, 0)
+	}
+
+	private fun decreaseSellInOf(item: Item) {
+		item.sellIn--
 	}
 }
