@@ -1,8 +1,8 @@
 package kata.gilded
 
-const val LEGENDARY_ITEM = "Sulfuras, Hand of Ragnaros"
-const val AGED_BRIE = "Aged Brie"
-const val BACKSTAGE_PASSES = "Backstage passes"
+private const val LEGENDARY_ITEM = "Sulfuras, Hand of Ragnaros"
+private const val AGED_BRIE = "Aged Brie"
+private const val BACKSTAGE_PASSES = "Backstage passes"
 
 class GildedRose(var items: Array<Item>) {
 
@@ -32,7 +32,7 @@ class GildedRose(var items: Array<Item>) {
 	}
 
 	private fun updateQualityOfBackstage(pass: Item) {
-		decreaseSellInOf(pass)
+		pass.sellIn--
 		when {
 			pass.sellIn < 0 -> pass.quality = 0
 			pass.sellIn < 5 -> pass.quality += 3
@@ -47,7 +47,7 @@ class GildedRose(var items: Array<Item>) {
 	}
 
 	private fun changeItemQualityWithSign(item: Item, sign: Int) {
-		decreaseSellInOf(item)
+		item.sellIn--
 		if (item.sellIn < 0) {
 			item.quality += sign * 2
 		} else {
@@ -55,9 +55,5 @@ class GildedRose(var items: Array<Item>) {
 		}
 		item.quality = Math.min(item.quality, 50)
 		item.quality = Math.max(item.quality, 0)
-	}
-
-	private fun decreaseSellInOf(item: Item) {
-		item.sellIn--
 	}
 }
